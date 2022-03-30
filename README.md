@@ -2,6 +2,7 @@
 ver. 0.01
 
 A command line script that auto-generates invoices from specific pdf files with job's description. A handy tool, saving time on boring tasks.
+Repo doesn't contain any actual job's docs as for privacy reasons.
 
 Principle:
 
