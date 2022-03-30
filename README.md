@@ -1,7 +1,7 @@
 # Auto-Invoicing
 ver. 0.01
 
-A script that auto-generates invoices from specific pdf files with job's description. A handy tool, saving time on boring tasks.
+A command line script that auto-generates invoices from specific pdf files with job's description. A handy tool, saving time on boring tasks.
 
 Principle:
 
