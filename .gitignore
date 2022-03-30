@@ -1,0 +1,7 @@
+*.docx
+.vscode
+__pycache__
+.pytest_cache
+venv
+et_data.txt
+jobs_ec
