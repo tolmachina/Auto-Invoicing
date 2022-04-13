@@ -1,8 +1,9 @@
 import tabula
 from datetime import date
+
 class JobParser():
     """
-    Parsing pdf job file into JobInfo data structure. Optimized for EC jobs.
+    Parsing pdf job file into JobInfo data structure. Only for EC jobs.
     """
     def __init__(self):
         self.table = None
@@ -12,15 +13,27 @@ class JobParser():
         Reads PDF with help of pre-created tabula-py template file.
         Returns pandas dataframe. 
         """
-        self.table = tabula.read_pdf_with_template(input_path = pdf, template_path= template)[0]
+        self.table = tabula.read_pdf_with_template(input_path = pdf, template_path= template)
         return self.table
 
-    def collect_job_info(self, invoice_number: str, manager_name: str, job_rate='£250'):
+    def collect_job_info_immersive(self, invoice_number):
+        job = JobInfo()
+        job.id = self.table[1].iat[0,1]
+        job.date_start = self.table[1].iat[2,1].split()[0]
+        job.date_end = self.table[1].iat[2,1].split()[0]
+        job.location = self.table[3].iat[0,0]
+        job.rate = "£" + str(list(self.table[2].columns)[3])
+        job.invoice_date = str(date.today().strftime("%d/%m/%Y"))
+        job.invoice_number = invoice_number
+        job.manager_name = self.table[1].iat[3,1]
+        return job
+        
+    def collect_job_info_ec(self, invoice_number: str, manager_name: str, job_rate='£250'):
         """
         Combines all data from dataframe table and also manually entered data.
         """
         
-        table = self.table.to_dict()
+        table = self.table[0].to_dict()
         job = JobInfo()
         job.id = list(table.keys())[1]
         
@@ -51,7 +64,7 @@ class JobParser():
 
 class JobInfo():
     """
-    Data Structure containing all information about job.
+    Data Structure containing all information about a job.
     """
     def __init__(self):
         self.id = None
@@ -64,7 +77,7 @@ class JobInfo():
         self.manager_name = None
     
     def __str__(self):
-        to_print = str(self.id) + '\n' + str(self.date_start) + '\n'  + str(self.date_end) + '\n'  + str(self.location) + '\n'  + str(self.rate) + '\n'  + str(self.invoice_date) + '\n'  + str(self.invoice_number)
+        to_print = "Job ID: " + str(self.id) + '\n' + "Date Start: " + str(self.date_start) + '\n' + "Date Ends: " + str(self.date_end) + '\n' +  "Location: " + str(self.location) + '\n' + "Day rate: " + str(self.rate) + '\n' + "Invoice Date: " + str(self.invoice_date) + '\n' + "Invoice Num: " + str(self.invoice_number)
         return to_print
     
 

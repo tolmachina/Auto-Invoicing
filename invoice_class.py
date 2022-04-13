@@ -2,10 +2,10 @@ from docx import Document
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from datetime import date
 from job_classes import JobInfo
-from constants import EVENT_CONCEPT_ADDRESS, ACCOUNT_DATA
+from constants import ACCOUNT_DATA
 
 class Invoice():
-    def __init__(self, job: JobInfo):
+    def __init__(self, address, job: JobInfo):
         self.job: JobInfo = job
         self.document = Document()
         # heading
@@ -15,7 +15,7 @@ class Invoice():
         # first paragraph
         p = self.document.add_paragraph("Bill To:")
         p1 = self.document.add_paragraph()
-        p1.add_run(EVENT_CONCEPT_ADDRESS + '\n').italic = True
+        p1.add_run(address + '\n').italic = True
         # date and num of invoice
         p_date_and_num = self.document.add_paragraph("Invoice Date: " + str(date.today().strftime("%d/%m/%Y")) + '\n')
         p_date_and_num.add_run("Invoice Number: " + str(job.invoice_number)) 

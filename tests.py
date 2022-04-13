@@ -15,7 +15,7 @@ def test_job_parser():
     invoice_number = '123'
     invoicer = JobParser()
     table = invoicer.read_pdf(pdf=PDF, template= TEMPLATE)
-    job = invoicer.collect_job_info(table,invoice_number,job_rate)
+    job = invoicer.collect_job_info_ec(table,invoice_number,job_rate)
     return job
 
 def test_invoice_docx(job: JobInfo):
@@ -23,7 +23,7 @@ def test_invoice_docx(job: JobInfo):
     job_rate = '£250'
     parser = JobParser()
     parser.read_pdf(pdf=PDF, template= TEMPLATE)
-    job = parser.collect_job_info(invoice_number,MANAGER,job_rate)
+    job = parser.collect_job_info_ec(invoice_number,MANAGER,job_rate)
     print(job)
 
     doc = Invoice(job)
@@ -36,7 +36,7 @@ def test_invoice_docx(job: JobInfo):
 def test_various_job():
     parse_job = JobParser()
     parse_job.read_pdf(pdf=PDF, template= TEMPLATE)
-    job_info = parse_job.collect_job_info(invoice_number='333', manager_name='John Johnsons', job_rate='£757.50')
+    job_info = parse_job.collect_job_info_ec(invoice_number='333', manager_name='John Johnsons', job_rate='£757.50')
 
     invoice = Invoice(job=job_info)
     invoice.finish_doc()
@@ -47,7 +47,7 @@ def test_various_job():
 def test_24_job():
     parse_job = JobParser()
     parse_job.read_pdf(pdf= PDF, template= TEMPLATE)
-    job_info = parse_job.collect_job_info(invoice_number='222', manager_name="John Johnsons", job_rate='£270')
+    job_info = parse_job.collect_job_info_ec(invoice_number='222', manager_name="John Johnsons", job_rate='£270')
 
     invoice = Invoice(job=job_info)
     invoice.finish_doc()
@@ -61,12 +61,12 @@ def test_24_job():
 def test_add_row():
     parse_job = JobParser()
     parse_job.read_pdf(pdf= PDF_RAA, template= TEMPLATE)
-    job_info = parse_job.collect_job_info(invoice_number='111', manager_name=MANAGER, job_rate='£270')
+    job_info = parse_job.collect_job_info_ec(invoice_number='111', manager_name=MANAGER, job_rate='£270')
 
     invoice = Invoice(job=job_info)
 
     parse_job.read_pdf(pdf= PDF, template= TEMPLATE)
-    job_info = parse_job.collect_job_info(invoice_number='111', manager_name=MANAGER, job_rate='£757')
+    job_info = parse_job.collect_job_info_ec(invoice_number='111', manager_name=MANAGER, job_rate='£757')
     invoice.add_table_row(job_info)
     
     invoice.finish_doc()

@@ -5,3 +5,6 @@ __pycache__
 venv
 et_data.txt
 jobs_ec
+jobs_immersive
+mobile_dev_env
+constants.py
