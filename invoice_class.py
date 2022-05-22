@@ -5,9 +5,10 @@ from job_classes import JobInfo
 from constants import ACCOUNT_DATA
 
 class Invoice():
-    def __init__(self, address, job: JobInfo):
+    def __init__(self, agency_address: str, job: JobInfo):
         self.job: JobInfo = job
         self.document = Document()
+        
         # heading
         heading_text = "INVOICE " + job.invoice_number
         h = self.document.add_heading(heading_text)
@@ -15,12 +16,12 @@ class Invoice():
         # first paragraph
         p = self.document.add_paragraph("Bill To:")
         p1 = self.document.add_paragraph()
-        p1.add_run(address + '\n').italic = True
+        p1.add_run(agency_address + '\n').italic = True
         # date and num of invoice
         p_date_and_num = self.document.add_paragraph("Invoice Date: " + str(date.today().strftime("%d/%m/%Y")) + '\n')
         p_date_and_num.add_run("Invoice Number: " + str(job.invoice_number)) 
         # text body
-        p_service = self.document.add_paragraph("For providing event services for " + job.date_start +  " as agreed with " + job.manager_name + ".\n")
+        self.p_service = self.document.add_paragraph("For providing event services for " + job.date_start +  " as agreed with " + job.manager_name + ".\n")
         # table heading
         self.table= self.document.add_table(rows=2, cols=5)  # magic row numbers !!!
         self.table.style = 'Light Shading Accent 1'
@@ -38,6 +39,10 @@ class Invoice():
         first_row[2].text = job.location
         first_row[3].text = job.id
         first_row[4].text = job.rate
+
+    def change_p_service_mult(self):
+        self.p_service.clear()
+        self.p_service.add_run("For providing event services for multiple dates as agreed with " + self.job.manager_name + ".\n")
 
     def add_table_row(self, new_job):
         new_row = self.table.add_row()

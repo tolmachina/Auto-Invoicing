@@ -16,14 +16,20 @@ def get_user_input():
     assert (agency == "Immersive" or agency=="EC")
     pdf = input(Fore.GREEN + "Enter path to job's pdf file from your agency: \n" + Fore.GREEN)
     
-    
     invoice_number = input(Fore.GREEN + 'Enter invoice number from 000 to 999:\n' + Fore.GREEN)
     if invoice_number == "":
         invoice_number = global_invoice_number
+    assert len(invoice_number) == 3
+    assert invoice_number.isdigit()
 
     if agency != "Immersive":
         manager_name = input(Fore.GREEN + 'Enter managers name, default Darren McGuinness:\n' + Fore.GREEN)
-        job_rate = input(Fore.GREEN + 'Enter total rate for the job:\n' + Fore.GREEN)
+        
+        while True:
+            job_rate = input(Fore.GREEN + 'Enter total rate for the job:\n' + Fore.GREEN)
+            if job_rate[1].isdigit() and job_rate[0] == '£':
+                break
+
         if manager_name == "":
             manager_name = 'Darren McGuinness'
     else:
@@ -50,16 +56,18 @@ def main():
     
     if agency == "EC":
         job_info = collect_job_info_ec(template_ec, pdf, invoice_number, manager_name, job_rate)
-        invoice = Invoice(address= EVENT_CONCEPT_ADDRESS, job = job_info)
+        invoice = Invoice(agency_address= EVENT_CONCEPT_ADDRESS, job = job_info)
     elif agency == "Immersive":
         job_info = collect_job_info_immersive(template_immersive, pdf, invoice_number, job_rate)
-        invoice = Invoice(address = IMMERSIVE_ADDRESS ,job=job_info)
+        invoice = Invoice(agency_address = IMMERSIVE_ADDRESS ,job=job_info)
     else:
         print("Wrong Agency Name")
+        exit()
     
     while True:
         more_rows = input(Fore.GREEN + "Do you want to add another job? y/n\n " + Fore.GREEN)
         if more_rows == 'y':
+            invoice.change_p_service_mult()
             new_pdf = input(Fore.GREEN + "Enter path to job's pdf file from EC:\n" + Fore.GREEN)
             new_job_rate = input(Fore.GREEN + 'Enter total rate for the job:\n' + Fore.GREEN)
             new_job_info = collect_job_info_ec(template_ec, new_pdf, invoice_number, manager_name, new_job_rate)
